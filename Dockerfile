@@ -9,7 +9,7 @@ LABEL description="Docker image with libraries and tools as required for buildin
 
 # Update the YARN version. The version that comes with the 8.10 image is very out of date.
 ENV YARN_VERSION 1.13.0
-RUN apk add --no-cache --virtual .build-deps-yarn curl=7.61.1-r1 gnupg=2.1.20-r1 tar=1.31-r0 git=2.13.7-r2 openssh=7.5_p1-r3 \
+RUN apk add --no-cache --virtual .build-deps-yarn curl=7.61.1-r1 gnupg=2.1.20-r1 tar=1.31-r0 \
     && export GPG_KEY=6A010C5166006599AA17F08146C2130DFD2497F5 \
     && gpg --batch --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys "$GPG_KEY" || \
     gpg --batch --keyserver hkp://ipv4.pool.sks-keyservers.net --recv-keys "$GPG_KEY" || \
@@ -22,7 +22,9 @@ RUN apk add --no-cache --virtual .build-deps-yarn curl=7.61.1-r1 gnupg=2.1.20-r1
     && ln -sf /opt/yarn-v$YARN_VERSION/bin/yarn /usr/local/bin/yarn \
     && ln -sf /opt/yarn-v$YARN_VERSION/bin/yarnpkg /usr/local/bin/yarnpkg \
     && rm yarn-v$YARN_VERSION.tar.gz.asc yarn-v$YARN_VERSION.tar.gz \
-    && apk del .build-deps-yarn
+    && apk del .build-deps-yarn \
+    && apk add --no-cache git=2.13.7-r2 openssh=7.5_p1-r3
+
 
 ENV HOME /home/jenkins
 RUN addgroup -S -g 10000 jenkins
