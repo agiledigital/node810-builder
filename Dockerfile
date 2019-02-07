@@ -9,14 +9,11 @@ LABEL description="Docker image with libraries and tools as required for buildin
 
 # Update the YARN version. The version that comes with the 8.10 image is very out of date.
 ENV YARN_VERSION 1.13.0
-RUN apk add --no-cache --virtual .build-deps-yarn curl gnupg tar \
-    && for key in \
-    6A010C5166006599AA17F08146C2130DFD2497F5 \
-    ; do \
-    gpg --batch --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys "$key" || \
-    gpg --batch --keyserver hkp://ipv4.pool.sks-keyservers.net --recv-keys "$key" || \
-    gpg --batch --keyserver hkp://pgp.mit.edu:80 --recv-keys "$key" ; \
-    done \
+RUN apk add --no-cache --virtual .build-deps-yarn curl=7.63.0-r0 gnupg=2.2.12-r0 tar=1.31-r0 git=2.20.1-r0 openssh=7.9_p1-r2 \
+    && export GPG_KEY=6A010C5166006599AA17F08146C2130DFD2497F5 \
+    && gpg --batch --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys "$GPG_KEY" || \
+    gpg --batch --keyserver hkp://ipv4.pool.sks-keyservers.net --recv-keys "$GPG_KEY" || \
+    gpg --batch --keyserver hkp://pgp.mit.edu:80 --recv-keys "$GPG_KEY" \
     && curl -fsSLO --compressed "https://yarnpkg.com/downloads/$YARN_VERSION/yarn-v$YARN_VERSION.tar.gz" \
     && curl -fsSLO --compressed "https://yarnpkg.com/downloads/$YARN_VERSION/yarn-v$YARN_VERSION.tar.gz.asc" \
     && gpg --batch --verify yarn-v$YARN_VERSION.tar.gz.asc yarn-v$YARN_VERSION.tar.gz \
