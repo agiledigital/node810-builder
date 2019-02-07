@@ -1,11 +1,31 @@
 #
-# NodeJS 8.11 Build Image
-# Docker image with libraries and tools as required for building NodeJS 8.11 projects using Yarn 
+# NodeJS 8.10 Build Image
+# Docker image with libraries and tools as required for building NodeJS 8.10 projects using Yarn
 #
 
-FROM node:8.11.1-alpine
-MAINTAINER Agile Digital <info@agiledigital.com.au>
-LABEL Description="Docker image with libraries and tools as required for building NodeJS 8.11 projects using Yarn" Vendor="Agile Digital" Version="0.1"
+FROM node:8.10.0-alpine
+LABEL maintainer="Agile Digital <info@agiledigital.com.au>"
+LABEL description="Docker image with libraries and tools as required for building NodeJS 8.11 projects using Yarn" Vendor="Agile Digital" Version="0.1"
+
+# Update the YARN version. The version that comes with the 8.10 image is very out of date.
+ENV YARN_VERSION 1.13.0
+RUN apk add --no-cache --virtual .build-deps-yarn curl gnupg tar \
+    && for key in \
+    6A010C5166006599AA17F08146C2130DFD2497F5 \
+    ; do \
+    gpg --batch --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys "$key" || \
+    gpg --batch --keyserver hkp://ipv4.pool.sks-keyservers.net --recv-keys "$key" || \
+    gpg --batch --keyserver hkp://pgp.mit.edu:80 --recv-keys "$key" ; \
+    done \
+    && curl -fsSLO --compressed "https://yarnpkg.com/downloads/$YARN_VERSION/yarn-v$YARN_VERSION.tar.gz" \
+    && curl -fsSLO --compressed "https://yarnpkg.com/downloads/$YARN_VERSION/yarn-v$YARN_VERSION.tar.gz.asc" \
+    && gpg --batch --verify yarn-v$YARN_VERSION.tar.gz.asc yarn-v$YARN_VERSION.tar.gz \
+    && mkdir -p /opt \
+    && tar -xzf yarn-v$YARN_VERSION.tar.gz -C /opt/ \
+    && ln -s /opt/yarn-v$YARN_VERSION/bin/yarn /usr/local/bin/yarn \
+    && ln -s /opt/yarn-v$YARN_VERSION/bin/yarnpkg /usr/local/bin/yarnpkg \
+    && rm yarn-v$YARN_VERSION.tar.gz.asc yarn-v$YARN_VERSION.tar.gz \
+    && apk del .build-deps-yarn
 
 ENV HOME /home/jenkins
 RUN addgroup -S -g 10000 jenkins
