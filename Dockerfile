@@ -9,7 +9,7 @@ LABEL description="Docker image with libraries and tools as required for buildin
 
 # Update the YARN version. The version that comes with the 8.10 image is very out of date.
 ENV YARN_VERSION 1.13.0
-RUN apk add --no-cache --virtual .build-deps-yarn curl=7.63.0-r0 gnupg=2.2.12-r0 tar=1.31-r0 git=2.20.1-r0 openssh=7.9_p1-r2 \
+RUN apk add --no-cache --virtual .build-deps-yarn curl=7.61.1-r1 gnupg=2.1.20-r1 tar=1.31-r0 git=2.13.7-r2 openssh=7.5_p1-r3 \
     && export GPG_KEY=6A010C5166006599AA17F08146C2130DFD2497F5 \
     && gpg --batch --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys "$GPG_KEY" || \
     gpg --batch --keyserver hkp://ipv4.pool.sks-keyservers.net --recv-keys "$GPG_KEY" || \
