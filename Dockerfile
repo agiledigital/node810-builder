@@ -29,6 +29,7 @@ RUN apk add --no-cache --virtual .build-deps-yarn curl=7.61.1-r1 gnupg=2.1.20-r1
 ENV HOME /home/jenkins
 RUN addgroup -S -g 10000 jenkins
 RUN adduser -S -u 10000 -h $HOME -G jenkins jenkins
+RUN npm install -g npm@6.8.0
 
 WORKDIR /home/jenkins
 USER jenkins
