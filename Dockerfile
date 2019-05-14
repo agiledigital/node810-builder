@@ -23,7 +23,7 @@ RUN apk add --no-cache --virtual .build-deps-yarn curl=7.61.1-r1 gnupg=2.1.20-r1
     && ln -sf /opt/yarn-v$YARN_VERSION/bin/yarnpkg /usr/local/bin/yarnpkg \
     && rm yarn-v$YARN_VERSION.tar.gz.asc yarn-v$YARN_VERSION.tar.gz \
     && apk del .build-deps-yarn \
-    && apk add --no-cache git=2.13.7-r2 openssh=7.5_p1-r3
+    && apk add --no-cache git=2.13.7-r2 openssh=7.5_p1-r4 openssl=1.0.2r-r0
 
 
 ENV HOME /home/jenkins
